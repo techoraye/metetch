@@ -1,0 +1,19 @@
+# Ignore main source file
+techofetch.cpp
+
+# Compiled binary
+techofetch
+
+# Build artifacts
+*.o
+*.out
+
+# Editor / OS junk
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+tmp/
+*.tmp
