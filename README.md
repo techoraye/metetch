@@ -27,14 +27,73 @@ All live values update **in place**, without flicker or overlapping text.
 
 ---
 
+## 📦 Installation
+
+### 🔹 Method 1: Install from GitHub Releases (recommended)
+
+1. Go to:
+```
+
+[https://github.com/techoraye/techofetch/releases](https://github.com/techoraye/techofetch/releases)
+
+````
+
+2. Download the latest **`techofetch`** binary
+
+3. Install it system-wide:
+```bash
+sudo install techofetch /usr/local/bin/techofetch
+````
+
+4. Run:
+
+   ```bash
+   techofetch
+   ```
+
+---
+
+### 🔹 Method 2: Clone repository and build locally
+
+> ⚠️ This method is intended for **personal/internal use only**.
+
+```bash
+git clone git@github.com:techoraye/techofetch.git
+cd techofetch
+```
+
+Compile:
+
+```bash
+g++ techofetch.cpp -o techofetch \
+  -std=gnu++17 \
+  -O2 \
+  -pthread \
+  -lcurl
+```
+
+Install:
+
+```bash
+sudo install techofetch /usr/local/bin/techofetch
+```
+
+Run:
+
+```bash
+techofetch
+```
+
+---
+
 ## 🚀 Usage
 
 ### Run techofetch
+
 ```bash
 techofetch
-````
+```
 
-That’s it.
 No arguments are required for normal use.
 
 ---
@@ -43,7 +102,7 @@ No arguments are required for normal use.
 
 ### Install system-wide
 
-Installs `techofetch` to `/usr/local/bin` so it can be run from anywhere.
+Installs `techofetch` to `/usr/local/bin`.
 
 ```bash
 sudo techofetch --install
@@ -53,7 +112,7 @@ sudo techofetch --install
 
 ### Update to the latest version
 
-Downloads the latest release and shows how to replace the binary.
+Checks GitHub Releases and downloads the latest binary.
 
 ```bash
 techofetch --update
@@ -62,8 +121,6 @@ techofetch --update
 ---
 
 ### Show help
-
-Displays available options.
 
 ```bash
 techofetch --help
@@ -92,6 +149,7 @@ techofetch --help
 * No configuration files are required
 * If weather or public IP cannot be detected, those fields will show `N/A`
 * Animation speed is optimized for fast startup
+* Automatic update checks do **not** replace binaries without user action
 
 ---
 
