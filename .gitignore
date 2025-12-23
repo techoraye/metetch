@@ -1,9 +1,3 @@
-# Ignore main source file
-techofetch.cpp
-
-# Compiled binary
-techofetch
-
 # Build artifacts
 *.o
 *.out
