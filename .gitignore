@@ -1,0 +1,16 @@
+# Build artifacts
+*.o
+*.out
+
+# Editor / OS junk
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+tmp/
+*.tmp
+# AUR-GUIDE (local only, not for submission)
+AUR-GUIDE/
+metetch-0.5.0/
