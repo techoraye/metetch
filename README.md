@@ -619,6 +619,4 @@ cd metetch && make && ./build/metetch
 
 [BUILD.md](docs/BUILD.md) • [QUICKSTART.md](docs/QUICKSTART.md) • [DESIGN.md](docs/DESIGN.md)
 
-[⬆ Back to top](#metetch-v04---modern-system-information-display)
-
 </div>
