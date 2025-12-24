@@ -24,7 +24,7 @@
 - Security status (SELinux, AppArmor, firewall)
 - Storage and I/O statistics
 
-**Current Version**: 0.5.3
+**Current Version**: 0.5.4
 **Language**: C++17
 **Build System**: CMake
 **Platform**: Linux

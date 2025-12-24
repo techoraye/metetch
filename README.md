@@ -1,14 +1,14 @@
-![Version](https://img.shields.io/badge/Version-0.5.3-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.5.4-blue.svg)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Language](https://img.shields.io/badge/Language-C%2B%2B17-brightgreen.svg)
 ![Platform](https://img.shields.io/badge/Platform-Linux-orange.svg)
 ![Build Status](https://img.shields.io/badge/Build-Passing-green.svg)
 
-**Metetch v0.5.3** is a beautifully designed, fast system information tool with a minimal aesthetic inspired by KDE Plasma and Wayland. Written in C++17, it displays comprehensive system metrics with elegant tree-based formatting. Made with ❤️
+**Metetch v0.5.4** is a beautifully designed, fast system information tool with a minimal aesthetic inspired by KDE Plasma and Wayland. Written in C++17, it displays comprehensive system metrics with elegant tree-based formatting. Made with ❤️
 
 **GitHub**: [https://github.com/techoraye/metetch](https://github.com/techoraye/metetch)
 
-### 🎨 **Features in v0.5.3**
+### 🎨 **Features in v0.5.4**
 - ✨ Advanced GPU monitoring (NVIDIA, AMD, Intel)
 - ✨ Comprehensive disk storage monitoring (multiple disks with detailed stats)
 - ✨ Advanced CPU information (frequency, cores, threads)
@@ -354,7 +354,7 @@ metetch/
 ├── install.sh                       # Cross-distro installer
 ├── VERIFY.sh                        # File verification script
 ├── CHECKSUMS.sha256                 # File integrity checksums
-├── LICENSE                          # Proprietary license
+├── LICENSE                          # MIT license
 ├── SETUP.md                         # Setup instructions
 └── README.md                        # This file
 ```
@@ -539,7 +539,7 @@ theme=default
    nano ~/.config/metetch/config.ini
    ```
 
-## 🎨 Display Sections (v0.5.3 Design)
+## 🎨 Display Sections (v0.5.4 Design)
 
 Metetch displays information in comprehensive organized sections with modern minimal design:
 
@@ -583,7 +583,7 @@ Metetch displays information in comprehensive organized sections with modern min
 - **Interface**: Network interface status
 - **VPN Status**: Smart color (🟢 green if active, 🔴 red if inactive)
 
-### 6. Disk Storage ⭐ **NEW in v0.5.3**
+### 6. Disk Storage ⭐ **NEW in v0.5.4**
 - **Dedicated Disk Section** with detailed per-disk information:
   - Disk Device: Device name and mount point
   - Filesystem Type: ext4, btrfs, tmpfs, etc.
@@ -686,14 +686,14 @@ export TERM=xterm-256color
 metetch
 ```
 
-## 📊 Performance (v0.5.3)
+## 📊 Performance (v0.5.4)
 
 - **Memory Footprint**: ~15-25 MB (unchanged from v0.3)
 - **CPU Usage**: <1% idle, <5% during updates (unchanged)
 - **Startup Time**: <500ms (slightly faster)
 - **Update Frequency**: CPU every 4s, Memory every 2.5s
 - **Display Refresh**: 1 second (smooth, no flicker)
- - **Rendering**: Optimized for v0.5.3 design
+ - **Rendering**: Optimized for v0.5.4 design
 
 ✨ **Zero performance loss** with complete visual redesign
 
@@ -737,7 +737,7 @@ See [LICENSE](LICENSE) file for complete legal terms.
 
 ## 🤝 Contributing
 
-Since metetch is proprietary software, external contributions are not accepted at this time.
+Since metetch is released under the MIT License, external contributions are welcome.
 
 If you find bugs or have suggestions, please contact the author directly.
 
@@ -753,7 +753,7 @@ cd metetch && make && ./build/metetch
 
 ⚡ **Made with ❤️ for the Linux community** ⚡
 
-**Metetch v0.5.3** • C++17 • Fast • Lightweight • Beautiful Design
+**Metetch v0.5.4** • C++17 • Fast • Lightweight • Beautiful Design
 
 [BUILD.md](docs/BUILD.md) • [QUICKSTART.md](docs/QUICKSTART.md) • [DESIGN.md](docs/DESIGN.md)
 

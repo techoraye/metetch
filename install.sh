@@ -2,9 +2,8 @@
 
 # ============================================================================
 # Metetch Installation Script
-# Copyright (c) 2025 techoraye - All Rights Reserved
-# Licensed under METETCH PROPRIETARY LICENSE
-# This software and source code are proprietary to techoraye.
+# Copyright (c) 2025 techoraye
+# Licensed under the MIT License
 # See LICENSE file for details
 # ============================================================================
 
@@ -39,7 +38,7 @@ CONFIG_DIR="$ACTUAL_HOME/.config/metetch"
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="$PROJECT_DIR/build"
 BINARY_NAME="metetch"
-VERSION="0.5.3"
+VERSION="0.5.4"
 
 # Functions
 print_header() {

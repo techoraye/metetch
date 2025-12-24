@@ -1,6 +1,6 @@
 pkgbase = metetch
 	pkgdesc = Fast system information display utility with modular customizable features
-	pkgver = 0.5.3
+	pkgver = 0.5.4
 	pkgrel = 1
 	url = https://github.com/techoraye/metetch
 	arch = x86_64

@@ -1,8 +1,7 @@
 # ============================================================================
 # Metetch Makefile
-# Copyright (c) 2025 techoraye - All Rights Reserved
-# Licensed under METETCH PROPRIETARY LICENSE
-# This software and source code are proprietary and confidential
+# Copyright (c) 2025 techoraye
+# Licensed under the MIT License
 # See LICENSE file for details
 # ============================================================================
 
@@ -17,7 +16,7 @@ NC     := \033[0m # No Color
 INSTALL_PATH := /usr/local/bin
 BUILD_DIR := build
 BINARY_NAME := metetch
-VERSION := 0.5.3
+VERSION := 0.5.4
 
 all: build
 

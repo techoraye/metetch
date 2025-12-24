@@ -1,4 +1,4 @@
-# 🚀 Metetch v0.5.3 - Quick Start Guide
+# 🚀 Metetch v0.5.4 - Quick Start Guide
 
 **Made with ❤️ • [GitHub](https://github.com/techoraye/metetch)**
 

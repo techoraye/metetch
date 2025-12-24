@@ -17,7 +17,7 @@ using namespace std;
 Live lv;
 Config cfg;
 Layout lay;
-const string ver = "0.5.3";
+const string ver = "0.5.4";
 const string repo = "techoraye/metetch";
 const string api = "https://api.github.com/repos/techoraye/metetch/releases/latest";
 const string bin = "https://github.com/techoraye/metfetch/releases/latest/download/metetch";
@@ -34,7 +34,7 @@ string httpGet(const string& url) {
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, wcb);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &resp);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, "metetch/0.5.3");
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, "metetch/0.5.4");
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3L);  // Shorter timeout for weather
     curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3L);

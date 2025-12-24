@@ -171,7 +171,7 @@ metetch
 - **GitHub Issues**: Report bugs or request features
 - **Discussions**: Ask questions and share ideas
 - **Documentation**: See [DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md)
-- **License**: Proprietary (See [LICENSE](LICENSE))
+- **License**: MIT (See [LICENSE](LICENSE))
 
 ---
 
@@ -186,6 +186,6 @@ metetch
 
 ## 📝 License
 
-Metetch is proprietary software. See [LICENSE](LICENSE) for details.
+Metetch is released under the MIT License. See [LICENSE](LICENSE) for details.
 
 **⚡ Metetch v0.4.0 - Modern System Information Monitor**

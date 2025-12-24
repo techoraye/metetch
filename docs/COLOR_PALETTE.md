@@ -57,7 +57,7 @@ Use the canonical header/brand block below as the geometric logo shown in the ap
  | | | | | |  __/ ||  __/ || (__| | | |
  |_| |_| |_|\___|\__\___|\__\___|_| |_|
 
-	📦 metetch 0.5.3  |  🐙 github.com/techoraye
+	📦 metetch 0.5.4  |  🐙 github.com/techoraye
 	─────────────────────────────────────────────
 ```
 
