@@ -1,13 +1,4 @@
-[![Version](https://img.shields.io/badge/Version-0.5.3-blue.svg)
-#
-#                 _       _       _     
-#  _ __ ___   ___| |_ ___| |_ ___| |__  
-# | '_ ` _ \ / _ \ __/ _ \ __/ __| '_ \ 
-# | | | | | |  __/ ||  __/ || (__| | | |
-# |_| |_| |_|\___|\__\___|\__\___|_| |_|
-#
-#  📦 metetch 0.5.3  |  🐙 github.com/techoraye
-#  ─────────────────────────────────────────────
+![Version](https://img.shields.io/badge/Version-0.5.3-blue.svg)
 [![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 ![Language](https://img.shields.io/badge/Language-C%2B%2B17-brightgreen.svg)
 ![Platform](https://img.shields.io/badge/Platform-Linux-orange.svg)
