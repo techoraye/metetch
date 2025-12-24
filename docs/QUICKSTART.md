@@ -1,4 +1,4 @@
-# 🚀 Metetch v0.4 - Quick Start Guide
+# 🚀 Metetch v0.5.3 - Quick Start Guide
 
 **Made with ❤️ • [GitHub](https://github.com/techoraye/metetch)**
 
@@ -235,7 +235,7 @@ metetch  # Now works from anywhere!
 Once you see the beautiful system information display with:
 - Modern geometric logo
 - Clean bordered sections
-- Cyan/purple/lime color accents
+- Default color mapping: Box borders/icons/labels: Cyan; Values: White; Version line: Magenta
 - Professional layout
 
 **You're all set!** 🎉

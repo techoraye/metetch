@@ -12,6 +12,7 @@
 #include <sstream>
 #include "update_handler.h"
 #include "utils.h"
+#include "colors.h"
 
 using namespace std;
 
@@ -66,22 +67,22 @@ bool showUpdatePopup(const string& current_ver, const string& latest_ver) {
     system("clear");
     
     printf("\n");
-    printf("  \033[1;36m╔════════════════════════════════════════════════════════════╗\033[0m\n");
-    printf("  \033[1;36m║\033[0m          \033[1;33m⚡ METETCH UPDATE AVAILABLE ⚡\033[0m                    \033[1;36m║\033[0m\n");
-    printf("  \033[1;36m╠════════════════════════════════════════════════════════════╣\033[0m\n");
-    printf("  \033[1;36m║\033[0m                                                        \033[1;36m║\033[0m\n");
-    printf("  \033[1;36m║\033[0m  Current Version: \033[38;5;231m%-42s\033[0m\033[1;36m║\033[0m\n", current_ver.c_str());
-    printf("  \033[1;36m║\033[0m  Latest Version:  \033[38;5;118m%-42s\033[0m\033[1;36m║\033[0m\n", latest_ver.c_str());
-    printf("  \033[1;36m║\033[0m                                                        \033[1;36m║\033[0m\n");
-    printf("  \033[1;36m╠════════════════════════════════════════════════════════════╣\033[0m\n");
-    printf("  \033[1;36m║\033[0m  A new version of Metetch is available!                 \033[1;36m║\033[0m\n");
-    printf("  \033[1;36m║\033[0m  Would you like to update now?                          \033[1;36m║\033[0m\n");
-    printf("  \033[1;36m║\033[0m                                                        \033[1;36m║\033[0m\n");
-    printf("  \033[1;36m╠════════════════════════════════════════════════════════════╣\033[0m\n");
-    printf("  \033[1;36m║\033[0m  [Y] Update now    [N] Continue running    [Q] Quit     \033[1;36m║\033[0m\n");
-    printf("  \033[1;36m╚════════════════════════════════════════════════════════════╝\033[0m\n\n");
+    printf("  %s╔════════════════════════════════════════════════════════════╗%s\n", colors::BOLD_CYAN, colors::RESET);
+    printf("  %s║%s          %s⚡ METETCH UPDATE AVAILABLE ⚡%s                    %s║%s\n", colors::BOLD_CYAN, colors::RESET, colors::BOLD_YELLOW, colors::RESET, colors::BOLD_CYAN, colors::RESET);
+    printf("  %s╠════════════════════════════════════════════════════════════╣%s\n", colors::BOLD_CYAN, colors::RESET);
+    printf("  %s║%s                                                        %s║%s\n", colors::BOLD_CYAN, colors::RESET, colors::BOLD_CYAN, colors::RESET);
+    printf("  %s║%s  Current Version: %s%-42s%s%s║%s\n", colors::BOLD_CYAN, colors::RESET, colors::TEXT_BRIGHT, current_ver.c_str(), colors::RESET, colors::BOLD_CYAN, colors::RESET);
+    printf("  %s║%s  Latest Version:  %s%-42s%s%s║%s\n", colors::BOLD_CYAN, colors::RESET, colors::ACCENT_LIME, latest_ver.c_str(), colors::RESET, colors::BOLD_CYAN, colors::RESET);
+    printf("  %s║%s                                                        %s║%s\n", colors::BOLD_CYAN, colors::RESET, colors::BOLD_CYAN, colors::RESET);
+    printf("  %s╠════════════════════════════════════════════════════════════╣%s\n", colors::BOLD_CYAN, colors::RESET);
+    printf("  %s║%s  A new version of Metetch is available!                 %s║%s\n", colors::BOLD_CYAN, colors::RESET, colors::BOLD_CYAN, colors::RESET);
+    printf("  %s║%s  Would you like to update now?                          %s║%s\n", colors::BOLD_CYAN, colors::RESET, colors::BOLD_CYAN, colors::RESET);
+    printf("  %s║%s                                                        %s║%s\n", colors::BOLD_CYAN, colors::RESET, colors::BOLD_CYAN, colors::RESET);
+    printf("  %s╠════════════════════════════════════════════════════════════╣%s\n", colors::BOLD_CYAN, colors::RESET);
+    printf("  %s║%s  [Y] Update now    [N] Continue running    [Q] Quit     %s║%s\n", colors::BOLD_CYAN, colors::RESET, colors::BOLD_CYAN, colors::RESET);
+    printf("  %s╚════════════════════════════════════════════════════════════╝%s\n\n", colors::BOLD_CYAN, colors::RESET);
     
-    printf("  \033[1;33mChoice: \033[0m");
+    printf("  %sChoice: %s", colors::BOLD_YELLOW, colors::RESET);
     fflush(stdout);
     
     int choice = getchar();
@@ -97,14 +98,14 @@ bool showUpdatePopup(const string& current_ver, const string& latest_ver) {
 }
 
 void gracefulShutdown() {
-    printf("\n  \033[1;33mℹ\033[0m Shutting down Metetch...\n");
-    printf("  \033[1;32m✓\033[0m Update will be installed on next run\n");
+    printf("\n  %sℹ%s Shutting down Metetch...\n", colors::BOLD_YELLOW, colors::RESET);
+    printf("  %s✓%s Update will be installed on next run\n", colors::STATUS_OK, colors::RESET);
     sleep(2);
     exit(0);
 }
 
 bool installUpdate() {
-    printf("\n  \033[1;33mℹ\033[0m Installing update...\n");
+    printf("\n  %sℹ%s Installing update...\n", colors::BOLD_YELLOW, colors::RESET);
     fflush(stdout);
     
     // Kill any running metetch instances
@@ -114,12 +115,12 @@ bool installUpdate() {
     int ret = system("sudo /home/$(whoami)/metetch/install.sh > /dev/null 2>&1");
     
     if (ret == 0) {
-        printf("  \033[1;32m✓\033[0m Update installed successfully!\n");
-        printf("  \033[1;33mℹ\033[0m Restarting Metetch...\n");
+        printf("  %s✓%s Update installed successfully!\n", colors::STATUS_OK, colors::RESET);
+        printf("  %sℹ%s Restarting Metetch...\n", colors::BOLD_YELLOW, colors::RESET);
         sleep(1);
         return true;
     } else {
-        printf("  \033[1;31m✗\033[0m Update failed. Please install manually.\n");
+        printf("  %s✗%s Update failed. Please install manually.\n", colors::STATUS_CRIT, colors::RESET);
         sleep(2);
         return false;
     }
@@ -131,7 +132,7 @@ bool isMetetchRunning() {
 }
 
 void killRunningMetetch() {
-    printf("  \033[1;33mℹ\033[0m Closing running Metetch instances...\n");
+    printf("  %sℹ%s Closing running Metetch instances...\n", colors::BOLD_YELLOW, colors::RESET);
     system("pkill -f 'metetch' 2>/dev/null || true");
     sleep(1);
 }

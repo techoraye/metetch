@@ -13,6 +13,8 @@ namespace sys {
     std::string getDesktopEnvironment();
     std::string getWindowManager();
     int getPackageCount();
+    int getEmergePackageCount();
+    int getFlatpakPackageCount();
     int getProcessCount();
     int getThreadCount();
 }

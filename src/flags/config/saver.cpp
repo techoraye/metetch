@@ -29,4 +29,7 @@ void saveConfig() {
     f << "show_audio=" << (cfg.show_audio ? "1" : "0") << "\n";
     f << "show_display=" << (cfg.show_display ? "1" : "0") << "\n";
     f << "theme=" << cfg.theme << "\n";
+    f << "preset_default=" << cfg.preset_default << "\n";
+    f << "preset_minimal=" << cfg.preset_minimal << "\n";
+    f << "preset_full=" << cfg.preset_full << "\n";
 }

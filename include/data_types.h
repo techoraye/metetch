@@ -149,6 +149,8 @@ struct Info {
     int failed_logins = 0;
     // Resource info
     int pkgs, processes, threads;
+    int pkgs_emerge = 0, pkgs_flatpak = 0;  // Separate counters
+    std::string pkg_manager = "pkg";  // Package manager name for display
     long swap_used, swap_total;
     std::string gpu_driver, audio_device, net_interface, vpn_status;
     std::string uptime;
@@ -185,7 +187,7 @@ struct Config {
     bool show_disk = true;
     bool show_network = true;
     bool show_battery = true;
-    bool show_weather = false;
+    bool show_weather = true;
     bool show_cpu_advanced = true;
     bool show_security = false;
     bool show_packages = true;
@@ -198,6 +200,10 @@ struct Config {
     
     // Theme selection
     std::string theme = "default";
+    // Presets stored as comma-separated feature ids
+    std::string preset_default = "";
+    std::string preset_minimal = "";
+    std::string preset_full = "";
 };
 
 // ============================================================================

@@ -27,6 +27,77 @@ void collect(Info& i) {
     i.host = getHostname();
     i.ip = getLocalIP();
     i.pub_ip = getPublicIP();
+    
+    // Initialize weather and city defaults
+    i.city = "N/A";
+    i.weather = "N/A";
+    
+    // Attempt to resolve city and weather when enabled (in background to not block)
+    if (i.pub_ip != "N/A" && cfg.show_weather) {
+        string city;
+        // Try multiple geolocation APIs
+        vector<string> geo_urls = {
+            "https://ipinfo.io/" + i.pub_ip + "/json",
+            "https://ipapi.co/" + i.pub_ip + "/json/",
+            "https://geoip-db.com/json"
+        };
+        
+        for (const auto& geo_url : geo_urls) {
+            string js = httpGet(geo_url);
+            if (!js.empty()) {
+                size_t pos = js.find("\"city\"");
+                if (pos != string::npos) {
+                    pos = js.find(':', pos);
+                    if (pos != string::npos) {
+                        size_t q1 = js.find('"', pos);
+                        if (q1 != string::npos) {
+                            size_t q2 = js.find('"', q1 + 1);
+                            if (q2 != string::npos && q2 > q1) {
+                                city = js.substr(q1 + 1, q2 - q1 - 1);
+                                break;  // Found city, stop trying
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!city.empty()) {
+            i.city = city;
+            // Fetch weather from wttr.in with proper formatting
+            string weather_url = "https://wttr.in/" + city + "?format=j1";  // JSON format for better parsing
+            string w_json = httpGet(weather_url);
+            if (!w_json.empty()) {
+                // Simple extraction of current temp/condition
+                size_t t_pos = w_json.find("\"temp_C\":");
+                if (t_pos != string::npos) {
+                    size_t end = w_json.find(',', t_pos);
+                    if (end != string::npos) {
+                        string temp_str = w_json.substr(t_pos + 9, end - t_pos - 9);
+                        // Try description as fallback
+                        size_t d_pos = w_json.find("\"description\":");
+                        if (d_pos != string::npos) {
+                            size_t dq1 = w_json.find('"', d_pos + 14);
+                            size_t dq2 = w_json.find('"', dq1 + 1);
+                            if (dq1 != string::npos && dq2 != string::npos) {
+                                string desc = w_json.substr(dq1 + 1, dq2 - dq1 - 1);
+                                i.weather = temp_str + "°C - " + desc;
+                            }
+                        } else {
+                            i.weather = temp_str + "°C";
+                        }
+                    }
+                } else {
+                    // Fallback to plain text format if JSON fails
+                    string w_plain = httpGet("https://wttr.in/" + city + "?format=1");
+                    if (!w_plain.empty()) {
+                        while (!w_plain.empty() && (w_plain.back() == '\n' || w_plain.back() == '\r')) w_plain.pop_back();
+                        i.weather = w_plain;
+                    }
+                }
+            }
+        }
+    }
     i.up = getUptime();
     i.up_d = getUptime();
     i.cpu = getCPUModel();
@@ -65,6 +136,8 @@ void collect(Info& i) {
     i.time_r = i.os;
     i.kern = getKernel();
     i.pkgs = getPackageCount();
+    i.pkgs_emerge = getEmergePackageCount();
+    i.pkgs_flatpak = getFlatpakPackageCount();
     i.processes = getProcessCount();
     i.threads = getThreadCount();
     i.sh = getShell();
@@ -83,6 +156,5 @@ void collect(Info& i) {
     i.swap_used = (si.totalswap - si.freeswap) * si.mem_unit / 1024 / 1024;
     i.swap_total = si.totalswap * si.mem_unit / 1024 / 1024;
     
-    i.weather = "N/A";
-    i.city = "N/A";
+    // legacy defaults already set above
 }

@@ -5,11 +5,13 @@
 
 #include <string>
 #include "data_types.h"
+#include "theme_manager.h"
 
 using namespace std;
 
 void selectTheme(const string& theme_name) {
     cfg.theme = theme_name;
+    applyTheme(theme_name);
 }
 
 string getCurrentTheme() {
@@ -21,5 +23,5 @@ const char* getThemeSelectorLabel() {
 }
 
 const char* getThemeSelectorDescription() {
-    return "Select color theme (default/dark/light)";
+    return "Select color theme from available list";
 }

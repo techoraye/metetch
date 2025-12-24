@@ -17,7 +17,7 @@ NC     := \033[0m # No Color
 INSTALL_PATH := /usr/local/bin
 BUILD_DIR := build
 BINARY_NAME := metetch
-VERSION := 0.5.0
+VERSION := 0.5.3
 
 all: build
 

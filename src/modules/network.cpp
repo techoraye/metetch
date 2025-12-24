@@ -13,6 +13,7 @@
 #include <ifaddrs.h>
 #include <unistd.h>
 #include "modules/network.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -44,9 +45,22 @@ string getLocalIP() {
 }
 
 string getPublicIP() {
-    // Try to read from DNS queries or cache
-    // For now, return placeholder
-    return "N/A";
+    // Try several public IP services via HTTP
+    string ip;
+    ip = httpGet("https://api.ipify.org/");
+    if (ip.empty()) ip = httpGet("https://ifconfig.me/ip");
+    if (ip.empty()) ip = httpGet("https://icanhazip.com/");
+
+    // Trim whitespace/newlines
+    if (!ip.empty()) {
+        while (!ip.empty() && (ip.back() == '\n' || ip.back() == '\r' || ip.back() == ' ' || ip.back() == '\t')) ip.pop_back();
+        size_t p = 0; while (p < ip.size() && (ip[p] == ' ' || ip[p] == '\t' || ip[p] == '\r' || ip[p] == '\n')) p++;
+        if (p > 0) ip = ip.substr(p);
+    }
+
+    // Basic sanity check: must contain at least one dot for IPv4 or colon for IPv6
+    if (ip.empty() || (ip.find('.') == string::npos && ip.find(':') == string::npos)) return "N/A";
+    return ip;
 }
 
 string getNetworkInterface() {

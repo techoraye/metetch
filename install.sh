@@ -4,7 +4,7 @@
 # Metetch Installation Script
 # Copyright (c) 2025 techoraye - All Rights Reserved
 # Licensed under METETCH PROPRIETARY LICENSE
-# This software and source code are proprietary and confidential
+# This software and source code are proprietary to techoraye.
 # See LICENSE file for details
 # ============================================================================
 
@@ -17,20 +17,29 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# ============================================================================
+# Colors - Synchronized with include/colors.h
+# ============================================================================
+# Standard colors (from colors.h BOLD variants)
+RED='\033[0;31m'          # STATUS_CRIT color
+GREEN='\033[0;32m'        # STATUS_OK variant
+YELLOW='\033[1;33m'       # BOLD_YELLOW - used for emphasis
+BLUE='\033[0;34m'         # Blue standard
+CYAN='\033[1;36m'         # Bold cyan
+MAGENTA='\033[1;35m'      # Bold magenta
+WHITE='\033[1;37m'        # Bold white
+NC='\033[0m'              # No Color (RESET)
 
 # Configuration
 INSTALL_DIR="/usr/local/bin"
-CONFIG_DIR="$HOME/.config/metetch"
+# Get the actual user's home directory (not root's)
+ACTUAL_USER="${SUDO_USER:-$USER}"
+ACTUAL_HOME=$(getent passwd "$ACTUAL_USER" | cut -d: -f6)
+CONFIG_DIR="$ACTUAL_HOME/.config/metetch"
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="$PROJECT_DIR/build"
 BINARY_NAME="metetch"
-VERSION="0.5.0"
+VERSION="0.5.3"
 
 # Functions
 print_header() {
@@ -56,6 +65,11 @@ print_warning() {
 }
 
 detect_distro() {
+    # Detect if running inside a Flatpak sandbox
+    if [ -n "$FLATPAK_ID" ] || [ -f "/.flatpak-info" ]; then
+        echo "flatpak"
+        return
+    fi
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         echo "${ID}"
@@ -76,60 +90,80 @@ install_dependencies() {
     print_info "Installing required dependencies..."
     echo ""
     
-    case "$distro" in
-        ubuntu|debian)
-            print_info "Using apt (Debian/Ubuntu)..."
+    print_info "Detecting package manager and installing dependencies..."
+
+    detect_pkg_manager() {
+        if command -v apt-get &> /dev/null; then echo "apt"; return; fi
+        if command -v pacman &> /dev/null; then echo "pacman"; return; fi
+        if command -v dnf &> /dev/null; then echo "dnf"; return; fi
+        if command -v yum &> /dev/null; then echo "yum"; return; fi
+        if command -v zypper &> /dev/null; then echo "zypper"; return; fi
+        if command -v apk &> /dev/null; then echo "apk"; return; fi
+        if command -v xbps-install &> /dev/null; then echo "xbps"; return; fi
+        if command -v emerge &> /dev/null; then echo "emerge"; return; fi
+        if command -v eopkg &> /dev/null; then echo "eopkg"; return; fi
+        if command -v pkg &> /dev/null; then echo "pkg"; return; fi
+        echo "unknown"
+    }
+
+    pm=$(detect_pkg_manager)
+    print_info "Detected package manager: ${pm}"
+
+    # Define generic package names we need for building
+    # build tools, cmake, curl/libcurl, ncurses/dev, pkg-config
+    case "$pm" in
+        apt)
             apt-get update > /dev/null 2>&1 || true
             apt-get install -y build-essential cmake libcurl4-openssl-dev libncurses-dev libtinfo-dev pkg-config
             ;;
-        arch|manjaro)
-            print_info "Using pacman (Arch/Manjaro)..."
-            pacman -Sy --noconfirm base-devel cmake curl ncurses
+        pacman)
+            pacman -Sy --noconfirm base-devel cmake curl ncurses pkgconf
             ;;
-        fedora|rhel|centos)
-            print_info "Using dnf/yum (Fedora/RHEL/CentOS)..."
-            if command -v dnf &> /dev/null; then
-                dnf install -y gcc-c++ cmake libcurl-devel ncurses-devel libtinfo-devel pkg-config
-            else
-                yum install -y gcc-c++ cmake libcurl-devel ncurses-devel libtinfo-devel pkg-config
-            fi
+        dnf)
+            dnf install -y @development-tools cmake libcurl-devel ncurses-devel pkgconfig 2>/dev/null || \
+            dnf install -y gcc-c++ cmake libcurl-devel ncurses-devel pkg-config
             ;;
-        opensuse*|sles)
-            print_info "Using zypper (openSUSE/SLES)..."
-            zypper install -y gcc-c++ cmake libcurl-devel ncurses-devel libtinfo-devel pkg-config
+        yum)
+            yum install -y gcc-c++ cmake libcurl-devel ncurses-devel pkg-config
             ;;
-        alpine)
-            print_info "Using apk (Alpine Linux)..."
+        zypper)
+            zypper install -y gcc-c++ cmake libcurl-devel ncurses-devel pkg-config
+            ;;
+        apk)
             apk add --no-cache build-base cmake curl-dev ncurses-dev linux-headers pkgconfig
             ;;
-        void)
-            print_info "Using xbps (Void Linux)..."
+        xbps)
             xbps-install -Sy base-devel cmake curl-devel ncurses-devel pkg-config
             ;;
-        gentoo)
-            print_info "Using emerge (Gentoo)..."
+        emerge)
             emerge --sync > /dev/null 2>&1 || true
             emerge -qv dev-build/cmake net-misc/curl sys-libs/ncurses
             ;;
+        eopkg)
+            eopkg install -y cmake curl-devel ncurses-devel pkgconfig || true
+            ;;
+        pkg)
+            pkg install -y gcc cmake curl ncurses pkgconf || true
+            ;;
         *)
-            print_warning "Unknown distro: $distro"
-            print_warning "Attempting generic installation..."
+            print_warning "Unknown package manager: ${pm}"
+            print_warning "Attempting to use known installers if available..."
             if command -v apt-get &> /dev/null; then
                 apt-get update && apt-get install -y build-essential cmake libcurl4-openssl-dev libncurses-dev libtinfo-dev pkg-config
             elif command -v pacman &> /dev/null; then
-                pacman -Sy --noconfirm base-devel cmake curl ncurses
+                pacman -Sy --noconfirm base-devel cmake curl ncurses pkgconf
             elif command -v dnf &> /dev/null; then
-                dnf install -y gcc-c++ cmake libcurl-devel ncurses-devel libtinfo-devel pkg-config
+                dnf install -y gcc-c++ cmake libcurl-devel ncurses-devel pkg-config
             elif command -v zypper &> /dev/null; then
-                zypper install -y gcc-c++ cmake libcurl-devel ncurses-devel libtinfo-devel pkg-config
+                zypper install -y gcc-c++ cmake libcurl-devel ncurses-devel pkg-config
             else
-                print_error "Could not detect package manager. Please install dependencies manually."
+                print_error "Could not detect package manager. Please install the following packages manually: build tools, cmake, libcurl-dev, ncurses-dev, pkg-config"
                 exit 1
             fi
             ;;
     esac
-    
-    print_success "Dependencies installed"
+
+    print_success "Dependencies installed (or attempted)."
 }
 
 check_dependencies() {
@@ -185,26 +219,54 @@ build_project() {
     mkdir -p "$TMP_BUILD"
     
     print_info "Setting up build environment..."
-    cp -r "$PROJECT_DIR"/{src,include,CMakeLists.txt} "$TMP_BUILD/" 2>/dev/null || true
+    
+    # Check if source files exist
+    if [ ! -d "$PROJECT_DIR/src" ] || [ ! -d "$PROJECT_DIR/include" ] || [ ! -f "$PROJECT_DIR/CMakeLists.txt" ]; then
+        print_error "Source files not found! Please ensure src/, include/, and CMakeLists.txt exist in $PROJECT_DIR"
+        rm -rf "$TMP_BUILD"
+        exit 1
+    fi
+    
+    cp -r "$PROJECT_DIR"/{src,include,CMakeLists.txt} "$TMP_BUILD/" 2>/dev/null || {
+        print_error "Failed to copy source files!"
+        rm -rf "$TMP_BUILD"
+        exit 1
+    }
     
     mkdir -p "$TMP_BUILD/build"
     cd "$TMP_BUILD/build"
     
     print_info "Configuring with CMake..."
-    cmake .. > /dev/null 2>&1 || { print_error "CMake configuration failed!"; exit 1; }
+    if ! cmake .. > /dev/null 2>&1; then
+        print_error "CMake configuration failed!"
+        print_info "Running cmake with verbose output for debugging:"
+        cmake ..
+        rm -rf "$TMP_BUILD"
+        exit 1
+    fi
     
     print_info "Compiling (using $(nproc) cores)..."
-    make -j$(nproc) > /dev/null 2>&1 || { print_error "Build failed!"; exit 1; }
+    if ! make -j$(nproc) > /dev/null 2>&1; then
+        print_error "Build failed!"
+        print_info "Running make with verbose output for debugging:"
+        make VERBOSE=1
+        rm -rf "$TMP_BUILD"
+        exit 1
+    fi
     
     if [ -f "$TMP_BUILD/build/$BINARY_NAME" ]; then
         print_success "Build completed successfully"
         # Copy back to project build directory
         mkdir -p "$BUILD_DIR"
-        cp "$TMP_BUILD/build/$BINARY_NAME" "$BUILD_DIR/$BINARY_NAME" 2>/dev/null || cp "$TMP_BUILD/build/$BINARY_NAME" /tmp/metetch_binary_$$
+        cp "$TMP_BUILD/build/$BINARY_NAME" "$BUILD_DIR/$BINARY_NAME" 2>/dev/null || {
+            cp "$TMP_BUILD/build/$BINARY_NAME" "/tmp/metetch_binary_$$"
+        }
         BUILD_BINARY="${BUILD_DIR}/${BINARY_NAME}"
         if [ ! -f "$BUILD_BINARY" ]; then
             BUILD_BINARY="/tmp/metetch_binary_$$"
         fi
+        # Cleanup temp build directory
+        rm -rf "$TMP_BUILD"
     else
         print_error "Build failed - binary not found!"
         rm -rf "$TMP_BUILD"
@@ -238,10 +300,12 @@ install_binary() {
 create_config_dir() {
     print_info "Setting up configuration directory..."
     
+    # Create config directory with proper ownership
     mkdir -p "$CONFIG_DIR"
+    chown -R "$ACTUAL_USER:$(id -gn "$ACTUAL_USER")" "$CONFIG_DIR"
     
     if [ ! -f "$CONFIG_DIR/config.ini" ]; then
-        cat > "$CONFIG_DIR/config.ini" << EOF
+        cat > "$CONFIG_DIR/config.ini" << 'EOF'
 # Metetch Configuration File
 # Location: ~/.config/metetch/config.ini
 
@@ -256,7 +320,20 @@ show_disk=1
 
 # Color theme (default, dark, light)
 theme=default
+
+# Preset Configurations
+# Default: Standard display with all main features
+preset_default=gpu_monitoring,disk_monitoring,network_monitoring,battery_display,cpu_advanced,package_count,uptime_display,memory_display,load_display,processes_display,display_info
+
+# Minimal: Compact view with only essential information
+preset_minimal=memory_display,disk_monitoring,cpu_advanced,network_monitoring
+
+# Full: Everything enabled including advanced features
+preset_full=gpu_monitoring,disk_monitoring,network_monitoring,battery_display,cpu_advanced,security_info,package_count,uptime_display,memory_display,load_display,processes_display,audio_display,display_info
 EOF
+        # Set proper ownership for config file
+        chown "$ACTUAL_USER:$(id -gn "$ACTUAL_USER")" "$CONFIG_DIR/config.ini"
+        chmod 644 "$CONFIG_DIR/config.ini"
         print_success "Configuration file created at $CONFIG_DIR/config.ini"
     else
         print_success "Configuration file already exists"
@@ -284,14 +361,22 @@ regenerate_checksums() {
     rm -f "$PROJECT_DIR/CHECKSUMS.sha256"
     
     # Generate new checksums
+    local checksummed=0
     for file in "${files[@]}"; do
         if [ -f "$file" ]; then
             sha256sum "$file" >> "$PROJECT_DIR/CHECKSUMS.sha256"
             print_success "Checksummed: $file"
+            checksummed=$((checksummed + 1))
+        else
+            print_warning "File not found (skipping): $file"
         fi
     done
     
-    print_success "Checksums regenerated at $PROJECT_DIR/CHECKSUMS.sha256"
+    if [ $checksummed -gt 0 ]; then
+        print_success "Checksums regenerated at $PROJECT_DIR/CHECKSUMS.sha256 ($checksummed files)"
+    else
+        print_warning "No files were checksummed"
+    fi
 }
 
 main() {
@@ -315,19 +400,19 @@ main() {
     
     print_success "Installation complete!"
     echo ""
-    echo -e "${GREEN}╔════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}║${NC}   ${YELLOW}🎉 Metetch Ready to Use! 🎉${NC}     ${GREEN}║${NC}"
-    echo -e "${GREEN}╚════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╔════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}║${NC}   ${YELLOW}🎉 Metetch Ready to Use! 🎉${NC}     ${CYAN}║${NC}"
+    echo -e "${CYAN}╚════════════════════════════════════════╝${NC}"
     echo ""
-    echo -e "${BLUE}Next steps:${NC}"
-    echo "  1. Run: ${YELLOW}metetch${NC}"
-    echo "  2. Configure: ${YELLOW}metetch --config${NC}"
-    echo "  3. Get help: ${YELLOW}metetch --help${NC}"
+    echo -e "${CYAN}Next steps:${NC}"
+    echo -e "  1. Run: ${YELLOW}metetch${NC}"
+    echo -e "  2. Configure: ${YELLOW}metetch --config${NC}"
+    echo -e "  3. Get help: ${YELLOW}metetch --help${NC}"
     echo ""
-    echo -e "${BLUE}Binary location:${NC} ${YELLOW}$INSTALL_DIR/$BINARY_NAME${NC}"
-    echo -e "${BLUE}Config location:${NC} ${YELLOW}$CONFIG_DIR/config.ini${NC}"
+    echo -e "${CYAN}Binary location:${NC} ${YELLOW}$INSTALL_DIR/$BINARY_NAME${NC}"
+    echo -e "${CYAN}Config location:${NC} ${YELLOW}$CONFIG_DIR/config.ini${NC}"
     echo ""
-    echo -e "${BLUE}To uninstall:${NC} ${YELLOW}sudo metetch --uninstall${NC}"
+    echo -e "${CYAN}To uninstall:${NC} ${YELLOW}sudo metetch --uninstall${NC}"
     echo ""
 }
 

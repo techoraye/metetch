@@ -17,7 +17,7 @@ using namespace std;
 Live lv;
 Config cfg;
 Layout lay;
-const string ver = "0.5.0";
+const string ver = "0.5.3";
 const string repo = "techoraye/metetch";
 const string api = "https://api.github.com/repos/techoraye/metetch/releases/latest";
 const string bin = "https://github.com/techoraye/metfetch/releases/latest/download/metetch";
@@ -34,13 +34,15 @@ string httpGet(const string& url) {
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, wcb);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &resp);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, "metfetch");
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, "metetch/0.5.3");
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3L);  // Shorter timeout for weather
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);  // Allow self-signed certs
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
     CURLcode res = curl_easy_perform(curl);
     curl_easy_cleanup(curl);
-    return (res == CURLE_OK) ? resp : "";
+    return (res == CURLE_OK && !resp.empty()) ? resp : "";
 }
 
 bool downloadFile(const string& url, const string& out) {

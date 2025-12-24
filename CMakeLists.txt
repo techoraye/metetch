@@ -72,6 +72,7 @@ set(SOURCES
     src/flags/config/menu.cpp
     src/flags/config/features_registry.cpp
     src/flags/config/display_title.cpp
+    src/flags/config/theme_manager.cpp
     
     # Flag Config Features (Modular)
     src/flags/config/features/gpu_monitoring_toggle.cpp

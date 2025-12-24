@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include "data_types.h"
+#include "theme_manager.h"
 
 using namespace std;
 
@@ -36,5 +37,10 @@ void loadConfig() {
         else if (k == "show_audio") cfg.show_audio = (v == "1");
         else if (k == "show_display") cfg.show_display = (v == "1");
         else if (k == "theme") cfg.theme = v;
+        else if (k == "preset_default") cfg.preset_default = v;
+        else if (k == "preset_minimal") cfg.preset_minimal = v;
+        else if (k == "preset_full") cfg.preset_full = v;
     }
+    // apply theme after loading
+    applyTheme(cfg.theme);
 }

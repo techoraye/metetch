@@ -9,12 +9,15 @@
 
 set -e
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# ============================================================================
+# Colors - Synchronized with include/colors.h
+# ============================================================================
+RED='\033[0;31m'          # STATUS_CRIT color
+GREEN='\033[0;32m'        # STATUS_OK variant
+YELLOW='\033[1;33m'       # BOLD_YELLOW - used for emphasis
+BLUE='\033[0;34m'         # Blue standard
+CYAN='\033[1;36m'         # Bold cyan
+NC='\033[0m'              # No Color (RESET)
 
 # Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -42,6 +45,11 @@ print_warning() {
 }
 
 detect_distro() {
+    # Detect Flatpak runtime
+    if [ -n "$FLATPAK_ID" ] || [ -f "/.flatpak-info" ]; then
+        echo "flatpak"
+        return
+    fi
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         echo "${ID}"

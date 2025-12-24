@@ -115,6 +115,15 @@ Metetch v0.4 deliver a **minimal, professional, KDE Plasma/Wayland-inspired term
 
 **Border Color:** Muted cyan (`ACCENT_CYAN`) for cohesive, minimal look
 
+### Color mapping (UI defaults)
+
+- Box borders (┌ ─ ┐ │ └ ┘): Cyan (`ACCENT_CYAN`)
+- Icons: Cyan (`ACCENT_CYAN`)
+- Labels: Cyan (`ACCENT_CYAN`)
+- Values: White (`TEXT_BRIGHT`)
+- Header separator (━): Cyan (`ACCENT_CYAN`)
+- Version line: Magenta (`ACCENT_MAGENTA`)
+
 ### Section Hierarchy
 
 ```

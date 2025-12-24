@@ -1,14 +1,19 @@
 #pragma once
 
 namespace colors {
-    // ========== MODERN MINIMAL COLOR PALETTE ==========
+    // ========== MINIMAL COLOR PALETTE ==========
     // Inspired by KDE Plasma 6 / Wayland dark themes
     // Designed for minimal, professional terminal aesthetics
+    
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 256-COLOR PALETTE (38;5;N format - preferred)
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     
     // PRIMARY ACCENT COLORS (thin borders, highlights)
     inline const char* ACCENT_CYAN   = "\033[38;5;51m";     // Bright cyan - primary UI
     inline const char* ACCENT_LIME   = "\033[38;5;118m";    // Lime green - success states
     inline const char* ACCENT_PURPLE = "\033[38;5;177m";    // Soft purple - secondary accent
+    inline const char* ACCENT_MAGENTA= "\033[38;5;201m";    // Magenta/pink - secondary highlight
     
     // TEXT COLORS
     inline const char* TEXT_BRIGHT   = "\033[38;5;231m";    // Bright white - main text
@@ -30,14 +35,47 @@ namespace colors {
     inline const char* COLOR_NET     = "\033[38;5;51m";     // Cyan - Network stats
     inline const char* COLOR_TEMP    = "\033[38;5;208m";    // Orange - Temperature
     inline const char* COLOR_GPU     = "\033[38;5;177m";    // Purple - GPU information
+    inline const char* COLOR_KERNEL  = "\033[38;5;33m";     // Sky blue - Kernel info
+    inline const char* COLOR_SHELL   = "\033[38;5;82m";     // Green - Shell info
+    inline const char* COLOR_UPTIME  = "\033[38;5;140m";    // Violet - Uptime
     
-    // TEXT STYLES
+    // EXTENDED COLORS FOR UI ELEMENTS
+    inline const char* COLOR_BORDER  = "\033[38;5;59m";     // Dark gray - borders/separators
+    inline const char* COLOR_ERROR   = "\033[38;5;196m";    // Bright red - errors
+    inline const char* COLOR_SUCCESS = "\033[38;5;46m";     // Bright green - success
+    inline const char* COLOR_INPUT   = "\033[38;5;229m";    // Light yellow - input prompts
+    
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // BOLD COLOR CODES (1;N format - for emphasis)
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
+    // Bold standard colors (used for emphasis/highlighting)
+    inline const char* BOLD_RED      = "\033[1;31m";        // Bold red
+    inline const char* BOLD_GREEN    = "\033[1;32m";        // Bold green
+    inline const char* BOLD_YELLOW   = "\033[1;33m";        // Bold yellow - used in install/update prompts
+    inline const char* BOLD_BLUE     = "\033[1;34m";        // Bold blue
+    inline const char* BOLD_MAGENTA  = "\033[1;35m";        // Bold magenta
+    inline const char* BOLD_CYAN     = "\033[1;36m";        // Bold cyan
+    inline const char* BOLD_WHITE    = "\033[1;37m";        // Bold white
+    
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // TEXT STYLES & MODIFIERS
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
     inline const char* BOLD          = "\033[1m";
     inline const char* DIM_STYLE     = "\033[2m";
     inline const char* ITALIC        = "\033[3m";
+    inline const char* UNDERLINE     = "\033[4m";
+    inline const char* BLINK         = "\033[5m";
+    inline const char* REVERSE       = "\033[7m";
+    inline const char* HIDDEN        = "\033[8m";
+    inline const char* STRIKETHROUGH = "\033[9m";
     inline const char* RESET         = "\033[0m";
     
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     // LEGACY ALIASES (for backward compatibility - will be phased out)
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
     inline const char* rst = RESET;
     inline const char* bld = BOLD;
     inline const char* dim = DIM_STYLE;
@@ -52,4 +90,5 @@ namespace colors {
     inline const char* p = ACCENT_PURPLE;
     inline const char* gry = TEXT_MUTED;
     inline const char* lgry = TEXT_DIM;
-    inline const char* o = STATUS_WARN;}
+    inline const char* o = STATUS_WARN;
+}

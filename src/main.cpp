@@ -45,27 +45,23 @@ int main(int argc, char* argv[]) {
             collect(inf);
             renderMinimalDisplay(inf);
             return 0;
+        } else if (strcmp(argv[1], "--full") == 0) {
+            loadConfig();
+            Info inf;
+            collect(inf);
+            renderDisplay(inf);
+            return 0;
         } else if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0) {
             showHelp();
             return 0;
         }
     }
 
+    // Default behavior: show full display (no flag)
     loadConfig();
     Info inf;
     collect(inf);
     renderDisplay(inf);
     
-    // Check for updates and exit after showing message (non-real-time mode)
-    thread checkUpdateThread([]() {
-        this_thread::sleep_for(chrono::seconds(2));
-        if (checkUpd() && !lv.update_shown.exchange(true)) {
-            showInstallMessage();
-            this_thread::sleep_for(chrono::seconds(3));
-            exit(0);
-        }
-    });
-    checkUpdateThread.detach();
-
     return 0;
 }

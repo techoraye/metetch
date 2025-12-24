@@ -1,16 +1,23 @@
-# ⚡ METETCH v0.5.0 - Modern System Information Display
-
-[![Version](https://img.shields.io/badge/Version-0.5.0.0-blue.svg)
+[![Version](https://img.shields.io/badge/Version-0.5.3-blue.svg)
+#
+#                 _       _       _     
+#  _ __ ___   ___| |_ ___| |_ ___| |__  
+# | '_ ` _ \ / _ \ __/ _ \ __/ __| '_ \ 
+# | | | | | |  __/ ||  __/ || (__| | | |
+# |_| |_| |_|\___|\__\___|\__\___|_| |_|
+#
+#  📦 metetch 0.5.3  |  🐙 github.com/techoraye
+#  ─────────────────────────────────────────────
 [![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 ![Language](https://img.shields.io/badge/Language-C%2B%2B17-brightgreen.svg)
 ![Platform](https://img.shields.io/badge/Platform-Linux-orange.svg)
 ![Build Status](https://img.shields.io/badge/Build-Passing-green.svg)
 
-**Metetch v0.5.0** is a beautifully designed, fast system information tool with a minimal aesthetic inspired by KDE Plasma and Wayland. Written in C++17, it displays comprehensive system metrics with elegant tree-based formatting. Made with ❤️
+**Metetch v0.5.3** is a beautifully designed, fast system information tool with a minimal aesthetic inspired by KDE Plasma and Wayland. Written in C++17, it displays comprehensive system metrics with elegant tree-based formatting. Made with ❤️
 
 **GitHub**: [https://github.com/techoraye/metetch](https://github.com/techoraye/metetch)
 
-### 🎨 **Features in v0.5.0**
+### 🎨 **Features in v0.5.3**
 - ✨ Advanced GPU monitoring (NVIDIA, AMD, Intel)
 - ✨ Comprehensive disk storage monitoring (multiple disks with detailed stats)
 - ✨ Advanced CPU information (frequency, cores, threads)
@@ -144,13 +151,14 @@ The script will:
 
 ## 💻 Usage
 
+
 ### Basic Display
 
 ```bash
 metetch
 ```
 
-Displays beautiful system information with real-time updates in a modern, minimal design.
+Displays the minimal/compact information by default. For the full detailed view use `--full`.
 
 ### Minimal/Compact Display
 
@@ -456,7 +464,7 @@ The project is organized into modular namespaces for clean separation of concern
 **render.cpp** - Display Rendering
 - Geometric blueprint-style logo
 - Minimal thin borders (not chunky)
-- Color palette (cyan, purple, lime accents)
+ - Color palette: see [docs/COLOR_PALETTE.md](docs/COLOR_PALETTE.md). Defaults — Box borders/icons/labels: Cyan; Values: White; Version line: Magenta
 - Flat progress bars with visual indicators
 - Status color coding (🟢 OK, 🟡 CAUTION, 🟠 WARNING, 🔴 CRITICAL)
 - Optimized terminal layout
@@ -540,7 +548,7 @@ theme=default
    nano ~/.config/metetch/config.ini
    ```
 
-## 🎨 Display Sections (v0.5.0 Design)
+## 🎨 Display Sections (v0.5.3 Design)
 
 Metetch displays information in comprehensive organized sections with modern minimal design:
 
@@ -584,7 +592,7 @@ Metetch displays information in comprehensive organized sections with modern min
 - **Interface**: Network interface status
 - **VPN Status**: Smart color (🟢 green if active, 🔴 red if inactive)
 
-### 6. Disk Storage ⭐ **NEW in v0.5.0**
+### 6. Disk Storage ⭐ **NEW in v0.5.3**
 - **Dedicated Disk Section** with detailed per-disk information:
   - Disk Device: Device name and mount point
   - Filesystem Type: ext4, btrfs, tmpfs, etc.
@@ -687,14 +695,14 @@ export TERM=xterm-256color
 metetch
 ```
 
-## 📊 Performance (v0.5.0)
+## 📊 Performance (v0.5.3)
 
 - **Memory Footprint**: ~15-25 MB (unchanged from v0.3)
 - **CPU Usage**: <1% idle, <5% during updates (unchanged)
 - **Startup Time**: <500ms (slightly faster)
 - **Update Frequency**: CPU every 4s, Memory every 2.5s
 - **Display Refresh**: 1 second (smooth, no flicker)
-- **Rendering**: Optimized for v0.5.0 design
+ - **Rendering**: Optimized for v0.5.3 design
 
 ✨ **Zero performance loss** with complete visual redesign
 
@@ -752,7 +760,7 @@ cd metetch && make && ./build/metetch
 
 ⚡ **Made with ❤️ for the Linux community** ⚡
 
-**Metetch v0.5.0** • C++17 • Fast • Lightweight • Beautiful Design
+**Metetch v0.5.3** • C++17 • Fast • Lightweight • Beautiful Design
 
 [BUILD.md](docs/BUILD.md) • [QUICKSTART.md](docs/QUICKSTART.md) • [DESIGN.md](docs/DESIGN.md)
 

@@ -101,25 +101,56 @@ string getWindowManager() {
     return "Unknown";
 }
 
+int getEmergePackageCount() {
+    FILE* fp = popen("qlist -I 2>/dev/null | wc -l", "r");
+    if (!fp) return 0;
+    int count = 0;
+    fscanf(fp, "%d", &count);
+    pclose(fp);
+    return max(0, count);
+}
+
+int getFlatpakPackageCount() {
+    if (system("command -v flatpak >/dev/null 2>&1") != 0) return 0;
+    FILE* fp = popen("flatpak list --app --columns=application 2>/dev/null | tail -n +1 | wc -l", "r");
+    if (!fp) return 0;
+    int count = 0;
+    fscanf(fp, "%d", &count);
+    pclose(fp);
+    return max(0, count - 1);  // Skip header
+}
+
 int getPackageCount() {
-    // Check for common package managers
-    vector<const char*> pkg_commands = {
+    // Try a range of package manager commands to maximize distro coverage
+    const vector<string> cmds = {
         "pacman -Qq 2>/dev/null | wc -l",
-        "dpkg-query -W -f='${Package}\n' 2>/dev/null | wc -l",
-        "rpm -qa 2>/dev/null | wc -l"
+        "dpkg-query -W -f='${Package}\\n' 2>/dev/null | wc -l",
+        "rpm -qa 2>/dev/null | wc -l",
+        "apk info 2>/dev/null | wc -l",
+        "xbps-query -l 2>/dev/null | wc -l",
+        "eopkg list-installed 2>/dev/null | wc -l",
+        "pkg list-installed 2>/dev/null | wc -l"
     };
-    
-    for (auto cmd : pkg_commands) {
-        FILE* fp = popen(cmd, "r");
-        if (fp) {
-            int count;
-            if (fscanf(fp, "%d", &count) == 1) {
-                pclose(fp);
-                return count;
-            }
+
+    for (const auto &cmd : cmds) {
+        FILE* fp = popen(cmd.c_str(), "r");
+        if (!fp) continue;
+        int count = 0;
+        if (fscanf(fp, "%d", &count) == 1) {
             pclose(fp);
+            if (count > 0) return count;
+        } else {
+            pclose(fp);
+            FILE* fp2 = popen(cmd.c_str(), "r");
+            if (!fp2) continue;
+            int lines = 0;
+            char buf[256];
+            while (fgets(buf, sizeof(buf), fp2)) lines++;
+            pclose(fp2);
+            if (lines > 0) return lines;
         }
     }
+
     return 0;
 }
 
